@@ -1,0 +1,18 @@
+{% extends "public_base.html" %}
+
+{% load markup thumbnail locales %}
+
+{% block content %}
+
+<form action="{% url public_cart %}" method="POST">
+  {% csrf_token %}
+  {% include "public/order_table.html" %}
+
+  <div class="buttons">
+    <input type="submit" name="shop" value="Keep Shopping" class="btn"/>
+    <input type="submit" name="update" value="Update" class="btn"/>
+    <input type="submit" name="checkout" value="Checkout" class="btn btn-primary"/>
+  </div>
+
+</form> 
+{% endblock %}

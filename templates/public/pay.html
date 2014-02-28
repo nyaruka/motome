@@ -1,0 +1,32 @@
+{% extends "public_base.html" %}
+{% load thumbnail locales markup %}
+
+{% block meta %}
+<meta http-equiv="refresh" content="5">
+{% endblock %}
+
+{% block messages %}
+{% endblock %}
+
+{% block content %}
+{% ifnotequal order.stage 'P' %}
+<div class="alert alert-block">
+  <h2>Mobile Money Payment process</h2>
+  <ol>
+    <li>Go to SIM Toolkit into your phone.</li>
+    <li>Select Mobile Money in the menu</li>
+    <li>Choose your preferred language</li>
+    <li>Select Send Money To</li>
+    <li>Select Mobile User</li>
+    <li>Fill in the motome mobile number <strong>0785911599</strong></li>
+    <li>Fill in the amount for this order <strong>{{order.total_with_delivery|format_currency:currency}}</strong></li>
+    <li><strong>Let the reason field blank in order for your transaction to be valid</strong></li>
+    <li>Confirm the transaction entry.</li>
+    <li>Fill in your Mobile Money PIN</li>
+  </ol>
+  <h4>Your account balance is {{balance|format_currency:currency}}</h4>
+</div>
+{% endifnotequal %}
+
+{% include "public/order_table.html" %}
+{% endblock content %}

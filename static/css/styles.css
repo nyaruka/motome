@@ -1,0 +1,72 @@
+.container {
+    width: 800px;
+}
+
+#footer {
+    background-image: url("../img/nyaruka.png");
+    height: 16px;
+    width: 100px;
+    float: right;
+}
+
+footer {
+    margin-top: 5px;
+    padding-top: 3px;
+}
+
+
+/* Add app specific CSS here */
+
+tr.total td {
+    font-weight: bold;
+}
+
+.buttons {
+    text-align: right;
+}
+
+td.price {
+    text-align: right;
+    padding-right: 8px;
+}
+
+th.remove {
+    text-align: center;
+}
+
+td.remove {
+    text-align: center;
+}
+
+tr.addon td.addon {
+    padding-left: 50px;
+}
+
+tr.addon td.price {
+    padding-right: 8px;
+}
+
+th.price {
+    text-align: right;
+}
+
+tr.addon td {
+    border: 0px;
+    padding: 0px;
+}
+
+.blurb {
+    background-color: #DFF0D8;
+    border-color: #D6E9C6;
+    text-align:center;
+    font-size:20px;
+    padding:10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.public-header {
+    height:102px;
+    background:#acafaf url('/static/img/header_bg.jpg') no-repeat top right;
+    border-radius: 0px 0px 5px 5px;
+}

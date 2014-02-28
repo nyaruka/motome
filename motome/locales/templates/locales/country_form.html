@@ -1,0 +1,25 @@
+{% extends "smartmin/form.html" %}
+
+{% load smartmin %}
+
+{% block post-fields %}
+<div class="row">
+  <div class="span1">&nbsp;</div>
+  <div id="bounds_map" class="span10" style="width:730px;height:350px">
+  </div>
+  <div class="span1">&nbsp;</div>
+</div>
+<div class="row">
+  <div class="span1">&nbsp;</div>
+  <div class="span8">
+    <div class="well">
+      <p>Maps are used throughout the system to display information and to allow users to select GPS coordinates.</p>
+      <p>The zoom level and centering of this map will be used whenever working with data for this country.</p>
+    </div>
+  </div>
+  <div class="span2">
+    <a class="btn btn-primary" onclick="setBounds()" href="javascript:void(0);">Set Bounds</a>
+  </div>
+</div>
+{% endblock %}
+

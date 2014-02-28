@@ -1,0 +1,28 @@
+# import our default settings
+from settings_common import *
+
+INSTALLED_APPS = INSTALLED_APPS + ('django_nose', 'debug_toolbar')
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=public,locales,stores,customers,landmarks,transactions',
+]
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ROUTER_URL = {
+     "mtn_3071": "http://aggregator.nyaruka.com/rsms/send?endpoint=nyaruka&number=%(recipient)s&text=%(text)s&password=glue",
+     "mtn_money": None,
+     "motome": None,
+     "default": None
+}
+
+ROUTER_WORKERS = 1
+ROUTER_PASSWORD = 'foo'
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+

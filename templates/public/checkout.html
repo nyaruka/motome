@@ -1,0 +1,42 @@
+{% extends "public_base.html" %}
+
+{% block content %}
+<div class="alert alert-info alert-block">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+  <h2>Please fill in you phone number</h2>
+  Your phone number must be mobile money ready, we are currently support MTN Rwanda subscribers only.<br/>
+  Will be used by motome as your account username and will be used all the way through payment and delivery contact.
+</div>
+
+<div class="span6 well" style="margin-left:0px;">
+    <form action='{% url public_checkout %}' method="POST" style="margin-bottom:0px;">
+      <fieldset class="control-group">
+        {% csrf_token %}
+        <label class="control-label">{{ form.phone_number.label }}</label>
+        {{ form.phone_number }}
+        <div>
+        {% for error in form.phone_number.errors %}
+        {% if error %}
+        <p class="error">{{error}}</p>
+        {% endif %}
+        {% endfor %}
+        </div>
+      </fieldset>
+      <input type="submit" class='btn btn-primary' value="Continue"/>
+    </form>
+</div>
+
+{% include "public/order_table.html" %}
+{% endblock content %}
+
+{% block extra-style %}
+<style>
+
+    .phone_number {
+        width:300px;
+        text-align: center;
+        font-size:18px;
+    }
+
+</style>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "smartmin/read.html" %}
+
+{% block read-buttons %}
+{% if view.edit_button %}
+<a class="btn btn-primary pull-right" href="../../update/{{ object.id }}/">edit</a>
+{% endif %}
+<a class="btn btn-info pull-right" href="../../print/{{object.id}}/">print</a>
+{% endblock %}

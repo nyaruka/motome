@@ -1,0 +1,82 @@
+{% extends "smartmin/create.html" %}
+
+{% load smartmin %}
+
+{% block content %}
+
+<div class="row">
+  <form action="{% url landmarks.landmark_create %}" method="POST"  class="">
+    {% csrf_token %}
+
+    {{ form.errors }}
+    <div id="coordinates_picker" class="span6">
+      .. loading map ..
+    </div>
+    <div class="span6">
+      {% render_field "official_name" %}
+      {% render_field "unofficial_name" %}
+      {% render_field "landmark_type" %}
+      {% render_field "coordinates" %}
+      <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra-script %}
+{{ block.super }}
+<script>
+$(document).ready(function(){
+  var landmark = {};
+  landmark.lat = parseFloat('{{request.GET.lat}}');
+  landmark.lng = parseFloat('{{request.GET.lng}}');
+  landmark.lat = landmark.lat || -9999;
+  landmark.lng = landmark.lng || -9999;
+
+  var coordinates = {};
+
+  if (landmark.lat == -9999 && navigator.geolocation) {
+      // Call getCurrentPosition with success and failure callbacks
+      navigator.geolocation.getCurrentPosition(success);
+  } else {
+      setLatLng(landmark.lat, landmark.lng);
+
+      {% for mark in request.session.landmarks %}
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng({{mark.lat}}, {{mark.lng}}),
+          map: map,
+          title: '{{mark.unofficial_name}}'
+        });
+      {% endfor %}
+
+      map.setZoom(15);
+      map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+  }
+});
+
+function success(position){
+   if (position.coords){
+        setLatLng(position.coords.latitude, position.coords.longitude);
+        map.setZoom(15);
+        map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+    }
+}
+</script>
+{% endblock %}
+
+{% block extra-style %}
+{{ block.super }}
+<style>
+#coordinates_picker {
+    height: 400px;
+    width: 450px;
+    border: 1px solid #ccc;
+}
+
+.instructions {
+  font-size: 24px;
+  padding: 10px;
+}
+
+</style>
+{% endblock %}

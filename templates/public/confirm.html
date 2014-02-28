@@ -1,0 +1,301 @@
+{% extends "public_base.html" %}
+{% load locales %}
+
+{% block motome-cart %}{% endblock %}
+
+{% block pre-content %}{% endblock %}
+
+{% block motome-header %}
+<div class="row" style="padding-top:10px;">
+  <div class="span5">
+    <div class="span2">
+      <img src="{{ STATIC_URL }}img/logo.png" style="margin-left:-10px;"/>
+    </div>
+    <div class="span2" style="padding-left:15px;">
+      <h4>ORDER #</h4>
+      <h1> 000{{order.id}}</h1>
+    </div>
+  </div>
+  <div class="span6 pull-right">
+    <div id="kigalimap" style="width:450px;height:225px;margin-left:30px"></div>
+  </div>
+  <div class="span5">
+    <table class="table">
+      <tr>
+        <td class="span2"  style="border:0px"></td>
+      </tr>
+      <tr>
+        <th class="span1" style="border:0px;">NAMES</th>
+        <td class="span2"  style="border:0px">{{order.user.get_full_name}}</td>
+      </tr>
+      <tr>
+        <th class="span1">PHONE #</th>
+        <td class="span2">{{order.user.username}}</td>
+      </tr>
+      <tr>
+        <th class="span1">ORDER TOTAL</th>
+        <td class="span2">{{order.total_value|format_currency:currency}}</td>
+      </tr>
+      <tr>
+        <th class="span1">DELIVERY AMOUNT</th>
+        <td class="span2">{{order.delivery_fee|format_currency:currency}}</td>
+      </tr>
+      <tr>
+        <td colspan=2></td>
+      </tr>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="row" style="background-color:white;">
+    <table class="table table-condensed table-striped">
+      <tr>
+        <th colspan="4" style="border:0px">ITEMS ORDERED</th>
+      </tr>
+      {% for item in order.items.all %}
+      <tr>
+        <th colspan="4">{{forloop.counter}}. {{item.product.name}} <strong style="font-size:10px;">({{item.product.price|format_currency:currency}})</strong></th>
+      </tr>
+      <tr>
+        {% for addon in item.product.addons.all|slice:":4" %}
+        <td class="addon">
+        {% if cart or addon.id in item.addon_ids %}
+        <img src="{{ STATIC_URL }}img/checked.png" style="width:16px;margin-top:-5px;" /> {{addon.name}} <strong style="font-size:10px;">({{addon.price|format_currency:currency}})</strong>
+        {%else%}
+        <img src="{{ STATIC_URL }}img/unchecked.png" style="width:16px;margin-top:-5px;" /> {{addon.name}}
+        {%endif%}
+        </td>
+        {% endfor %}            
+      </tr>
+      <tr>
+        {% for addon in item.product.addons.all|slice:"4:8" %}
+        <td class="addon">
+        {% if cart or addon.id in item.addon_ids %}
+        <img src="{{ STATIC_URL }}img/checked.png" style="width:16px;margin-top:-5px;" /> {{addon.name}}
+        <strong style="font-size:10px;">({{addon.price|format_currency:currency}})</strong>
+        {%else%}
+        <img src="{{ STATIC_URL }}img/unchecked.png" style="width:16px;margin-top:-5px;" /> {{addon.name}}
+        {%endif%}
+        </td>
+        {% endfor %}            
+      </tr>
+      <tr>
+        {% for addon in item.product.addons.all|slice:"8:12" %}
+        <td class="addon">
+        {% if cart or addon.id in item.addon_ids %}
+        <img src="{{ STATIC_URL }}img/checked.png" style="width:16px;margin-top:-5px;" /> {{addon.name}} 
+        <strong style="font-size:10px;">({{addon.price|format_currency:currency}})</strong>
+        {%else%}
+        <img src="{{ STATIC_URL }}img/unchecked.png" style="width:16px;margin-top:-5px;" /> {{addon.name}}
+        {%endif%}
+        </td>
+        {% endfor %}            
+      </tr>
+      {% endfor %}
+      <tr>
+        <th colspan="4"></th>
+      </tr>
+    </table>
+</div>
+<br clear="both" />
+
+<div class="row">
+  <div id="mapbox" style="width:450px;height:400px;float:left;"></div>
+  <div id="satellite" style="width:450px;height:400px;float:right;margin-left:30px"></div>
+</div>
+<br clear="both"/>
+<br clear="both"/>
+
+<span class="row"><strong>FOR MOTOME STAFF ONLY</strong></span>
+<br clear="both"/>
+<br clear="both"/>
+
+<div class="row" style="background-color:white;">
+  <div class="">
+    {{ order.location.building }}  {{ order.location.business }} {{ order.location.hints }}
+  </div>  
+  <br clear="both"/>
+
+  <table class="table table-condensed">
+    <tr>
+      <td>SEND</td>
+      <th>P 000{{order.id}}</th>
+      <td>TO 3071</td>
+      <td>ON PICKUP</td>
+    </tr>
+    <tr>
+      <td>SEND</td>
+      <th>D 000{{order.id}} + LOCATION DETAILS </th>
+      <td>TO 3071</td>
+      <td>ON DELIVERY</td>
+    </tr>
+
+  </table>
+</div>
+{% endblock content %}
+
+{% block extra-script %}
+{{ block.super }}
+
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA9rA4sRDxBME5OHS_aCGPyTzRiEObSYdE&sensor=false"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var lat = "{{ order.location.lat }}";
+    var lng = "{{ order.location.lng }}";
+    var zoom = 18;
+    
+    latlng = new google.maps.LatLng(lat, lng);
+
+    var options = {
+        zoom: zoom,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDoubleClickZoom: true,
+        disableDefaultUI: true,
+        scrollwheel: false,
+        navigationControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        draggable: false,
+    };
+    var map = new google.maps.Map(document.getElementById("satellite"), options);
+
+    map_marker = new google.maps.Marker({
+        position: latlng,
+        draggable: false,
+        map: map
+    });
+
+    map.panTo(latlng);
+    map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+
+    // the begining of the destination map using mapbox
+    var markersLayer = new L.GeoJSON();
+    var url = "http://a.tiles.mapbox.com/v3/nyaruka.MotomeMap.jsonp";
+    var destination_lat = "{{ order.location.lat }}";
+    var destination_lng = "{{ order.location.lng }}";
+    var destination_zoom = 15;
+
+    google.maps.event.addListener(map, 'idle', function() {
+
+        var ne_lat = map.getBounds().getNorthEast().lat();
+        var ne_lng = map.getBounds().getNorthEast().lng();
+        var sw_lat = map.getBounds().getSouthWest().lat();
+        var sw_lng = map.getBounds().getSouthWest().lng();
+
+        // defining GeoJSON object for some reason coordinates format is "longitude" then "latitude". Awakeward :)
+        var markers = {
+            "type": "FeatureCollection",
+            "features": [
+                { "type": "Feature",
+                  "geometry": {"type": "Point", "coordinates": [destination_lng, destination_lat]},
+                  "properties": {"info": "Destination"}
+                },
+                { "type": "Feature",
+                  "geometry": {"type": "LineString",
+                               "coordinates": [
+                                   [ne_lng, ne_lat],
+                                   [sw_lng, ne_lat],
+                                   [sw_lng, sw_lat],
+                                   [ne_lng, sw_lat],
+                                   [ne_lng, ne_lat]
+                               ]},
+                  "properties": {"info": "Destination"}
+                }
+            ]
+        }
+
+        // Add the destination data to markers layer
+        markersLayer.addGeoJSON(markers);
+
+        // Make a new Leaflet map in the left bottom div mapbox
+        var destination_map = new L.Map('mapbox', {
+            center: new L.LatLng(destination_lat, destination_lng),
+            dragging: false,
+            zoomControl: false,
+            attributionControl: false,
+            touchZoom: false,
+            scrollWheelZoom: false,
+            zoom: destination_zoom,
+        });
+
+        // add markers layer on top of the map
+        destination_map.addLayer(markersLayer);
+
+        wax.tilejson(url, function(tilejson) {
+            destination_map.addLayer(new wax.leaf.connector(tilejson));
+
+        // the begining of the kigali map using mapbox
+        var markersLayer = new L.GeoJSON();
+        var store_zoom = 12;
+
+        var ne_lat = destination_map.getBounds().getNorthEast().lat;
+        var ne_lng = destination_map.getBounds().getNorthEast().lng;
+        var sw_lat = destination_map.getBounds().getSouthWest().lat;
+        var sw_lng = destination_map.getBounds().getSouthWest().lng;
+
+        var markers = {
+            "type": "FeatureCollection",
+            "features": [
+                { "type": "Feature",
+                  "geometry": {"type": "Point", "coordinates": [destination_lng, destination_lat]},
+                  "properties": {"info": "Destination"}
+                },
+                { "type": "Feature",
+                  "geometry": {"type": "LineString",
+                               "coordinates": [
+                                   [ne_lng, ne_lat],
+                                   [sw_lng, ne_lat],
+                                   [sw_lng, sw_lat],
+                                   [ne_lng, sw_lat],
+                                   [ne_lng, ne_lat]
+                               ]},
+                  "properties": {"info": "Destination"}
+                }
+            ]
+        }
+
+
+        // Add the destination data to markers layer
+        markersLayer.addGeoJSON(markers);
+
+        // Make a new leflet map in the top div
+        var kigali_map = new L.Map('kigalimap', {
+            center: new L.LatLng(destination_lat, destination_lng),
+            dragging: false,
+            zoomControl: false,
+            attributionControl: false,
+            touchZoom: false,
+            scrollWheelZoom: false,
+            zoom: store_zoom,
+        });
+
+        // add markers layer on top of the map
+        kigali_map.addLayer(markersLayer);
+
+        // Get metadata about the map from MapBox
+        wax.tilejson(url, function(tilejson) {
+            kigali_map.addLayer(new wax.leaf.connector(tilejson));
+        });
+
+    });
+
+    });
+
+
+  });
+</script>
+
+{% endblock %}
+
+{% block extra-style %}
+<style>
+.leaflet-control-attribution {
+display: none;
+}
+</style>
+{% endblock %}

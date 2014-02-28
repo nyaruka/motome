@@ -1,0 +1,62 @@
+# import our default settings
+from settings_common import *
+
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
+# these guys will get email from sentry
+ADMINS = (
+   ('Nyaruka Ops', 'ops@nyaruka.com'),
+)
+
+MANAGERS = ADMINS
+
+# add gunicorn
+INSTALLED_APPS = INSTALLED_APPS + ('gunicorn',)
+
+# static dir is different for prod
+STATIC_URL = '/sitestatic/'
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+# Set your production database settings here
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '${db}',
+        'USER': '${db_user}',
+        'PASSWORD': '${db_password}',
+        'HOST': '${db_host}',
+        'PORT': '',                      
+        'OPTIONS': {   "init_command": "SET storage_engine=INNODB",
+                       "charset": "utf8", 
+        }
+    }
+}
+
+# no debug toolbar in prod
+MIDDLEWARE_CLASSES = (
+    'sentry.client.middleware.SentryResponseErrorIdMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'reversion.middleware.RevisionMiddleware',
+    'smartmin.middleware.AjaxRedirect',
+    'django.middleware.locale.LocaleMiddleware',
+)
+
+
+# Set your DSN value
+SENTRY_DSN = 'http://60093b8d0bbe4b969d8eabfa7e98bc06:c24d2ce8f1c34241b6ed49290a3ca1f9@monitor.nyaruka.com/10'
+
+ROUTER_URL = "http://aggregator.nyaruka.com/rsms/send?endpoint=nyaruka&number=%(recipient)s&text=%(text)s&password=passwordpassword"
+ROUTER_WORKERS = 1
+ROUTER_PASSWORD='passwordpassword'
+

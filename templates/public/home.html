@@ -1,0 +1,80 @@
+{% extends "public_base.html" %}
+
+{% load quickblocks %}
+{% load markup thumbnail locales %}
+
+{% block messages %}
+{% endblock %}
+
+{% block content %}
+{% load_quickblocks "quote" %}
+
+{% for store in favorite_stores %}
+<div class="row">
+  <div class="span8">
+  <div class="motome-store" style="background: url('{{MEDIA_URL}}{{store.splash}}') no-repeat center center;">
+
+    <span class="store-label span3">{{ store.name|upper }}</span>
+    <span class="store-content span3">{{ store.description }}</span>
+    <span class="store-product-label span2">Products list</span>
+  </div>
+  <div class="motome-products">
+    {% for product in product_list %}
+    {% ifequal product.store.name store.name %}
+    <div class="row">
+      <div class="product-image span3">
+        {% thumbnail product.image "150x120" crop="center" upscale="True" as im %}
+        <img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
+        {% endthumbnail %}      
+      </div>
+      <div class="span3">
+        <div class="product">
+          <h2>{{ product.name }}</h2>
+          <br clear="both" />
+          <div class="description">
+            {{ product.description|markdown }}
+          </div>
+        </div>
+      </div>
+      <div class="span2">
+        <div clas="price">
+          <h2 class="pull-right">{{ product.price|format_currency:currency }}</h2>
+        </div>
+        <div class="buy pull-right">
+          <form method="POST" action="{% url public_cart %}">
+            <input type="hidden" name="add_product" value="{{ product.id }}"></input>
+            <button type="submit" class="btn btn-success"><i class="icon-shopping-cart icon-white"></i> Order</button>
+            {% csrf_token %}
+          </form>
+        </div>
+      </div>
+    </div>
+    <br clear="both" />
+    {% endifequal %}
+    {% endfor %}
+  </div>
+  </div>
+  <div class="span4">
+    <blockquote>
+      {% for quote in quote %}
+      <p>
+        {{quote.content}}
+      </p>
+      <small>{{quote.title}}</small>
+      {% endfor %}
+    </blockquote>
+  </div>
+
+</div>
+
+
+<br clear="both" />
+{% endfor %}
+
+{% endblock %}
+
+{% block extra-style %}
+<style>
+
+</style>
+{% endblock %}

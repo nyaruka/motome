@@ -1,0 +1,22 @@
+{% extends "smartmin/form.html" %}
+
+{% block post-fields %}
+<div class="bordered">
+  <div id="coordinates_picker">
+    .. loading map ..
+  </div>
+</div>
+{% endblock %}
+
+{% block extra-style %}
+{{ block.super }}
+<style>
+#coordinates_picker {
+    height: 400px;
+    width: 700px;
+    border: 1px solid #ccc;
+}
+</style>
+{% endblock %}
+
+

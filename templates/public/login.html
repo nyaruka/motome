@@ -1,0 +1,83 @@
+{% extends "public_base.html" %}
+{% load markup thumbnail locales %}
+
+{% block content %}
+<div class="row well" style="margin-left:0px">
+  <div class="alert alert-info alert-block">
+    <strong>Login with password.</strong>
+    A six digit password has been sent to {{user.username|slice:"2:"}}.
+  </div>
+
+  <fieldset class="control-group">
+    <form action='{% url public_login %}' method="POST" style="margin-bottom:0px;">
+      {% csrf_token %}
+
+      <div class="{%if 'last_name' in customer_form.initial.keys %}field_hidden{%else%}{%endif%}">
+        <label class="control-label">{{ customer_form.first_name.label }}</label>
+        {{ customer_form.first_name }}
+        <div>
+          {% for error in customer_form.first_name.errors %}
+          {% if error %}
+          <p class="error">{{error}}</p>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="{%if 'last_name' in customer_form.initial.keys %}field_hidden{%else%}{%endif%}">
+        <label class="control-label">{{ customer_form.last_name.label }}</label>
+        {{ customer_form.last_name }}
+        <div>
+          {% for error in customer_form.last_name.errors %}
+          {% if error %}
+          <p class="error">{{error}}</p>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="{%if 'email' in customer_form.initial.keys %}field_hidden{%else%}{%endif%}">
+        <label class="control-label">{{ customer_form.email.label }}</label>
+        {{ customer_form.email }}
+        <div>
+          {% for error in customer_form.email.errors %}
+          {% if error %}
+          <p class="error">{{error}}</p>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <label class="control-label">{{ password_form.password.label }}</label>
+      {{ password_form.password }}
+      <div>
+        {% for error in password_form.password.errors %}
+        {% if error %}
+        <p class="error">{{error}}</p>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <input type="submit" class='btn btn-primary' value="Login"/>
+    </form>
+  </fieldset>
+
+  <fieldset class="control-group">
+  </fieldset>
+
+</div>
+{% endblock content %}
+
+{% block extra-style %}
+<style>
+    .login_form {
+        padding: 20px;
+        text-align: center;
+        background-color:
+    }
+
+    .field_hidden {
+    display: none;
+    }
+
+</style>
+{% endblock extra-style %}

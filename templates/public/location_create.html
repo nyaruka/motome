@@ -1,0 +1,84 @@
+{% extends "public/form.html" %}
+{% load markup thumbnail locales %}
+
+{% load smartmin %}
+
+{% block content %}
+<div class="alert alert-info alert-block">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+  Locate precisely where you want to the delivery address, you can zoom, pan in all direction.
+  <h4>Double click to your exact address to mark it and we will deliver there.</h4>
+</div>
+
+<form action="{% url public.location_create %}" method="POST"  class="well">
+{% csrf_token %}
+
+<div id="coordinates_picker">
+  .. loading map ..
+</div>
+<br clear="both"/>
+<div style="display: none;">
+{% render_field "coordinates" %}
+</div>
+{% render_field "building" %}
+{% render_field "business" %}
+{% render_field "hints" %}
+
+<input type="submit" class="btn btn-primary" value="That's Me!" />
+</form>
+
+{% endblock %}
+
+{% block extra-script %}
+{{ block.super }}
+<script>
+$(document).ready(function(){
+
+  var location = {};
+  location.lat = parseFloat('{{request.GET.lat}}');
+  location.lng = parseFloat('{{request.GET.lng}}');
+  location.lat = location.lat || -9999;
+  location.lng = location.lng || -9999;
+
+  if (location.lat == -9999 && navigator.geolocation) {
+      // Call getCurrentPosition with success and failure callbacks
+      navigator.geolocation.getCurrentPosition(success);
+  } else {
+      setLatLng(location.lat, location.lng);
+      map.setZoom(18);
+      map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+  }
+});
+
+function success(position){ 
+    if (position.coords){
+        setLatLng(position.coords.latitude, position.coords.longitude);
+        map.setZoom(18);
+        map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+    }
+}
+</script>
+{% endblock %}
+
+{% block extra-style %}
+{{ block.super }}
+<style>
+#coordinates_picker {
+    height: 400px;
+    width: 900px;
+    border: 1px solid #ccc;
+}
+
+.instructions {
+  font-size: 24px;
+  padding: 10px;
+}
+
+textarea {
+  width: 700px;
+  height: 60px;
+}
+</style>
+{% endblock %}
+
+

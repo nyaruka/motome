@@ -1,0 +1,36 @@
+{% extends "public_base.html" %}
+
+{% load markup thumbnail %}
+
+{% block content %}
+<marquee><h1>Moto2Me delivers to you!  Get a free Coke with your order!  </h1></marquee>
+
+{% for product in product_list %}
+<div class="row">
+  <div class="span4">
+    <div class="product-image">
+      {% thumbnail product.image "300x300" as im %}
+      <img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
+      {% endthumbnail %}      
+    </div>
+  </div>
+  <div class="span5">
+    <div class="product">
+      <h2>{{ product.name }}</h2>
+      <div class="description">
+        {{ product.description|markdown }}
+      </div>
+      <div class="buy">
+        <a href="" class="btn">Order</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block extra-style %}
+<style>
+
+</style>
+{% endblock %}

@@ -1,0 +1,66 @@
+[
+    {
+        "pk": 1,
+        "model": "django_quickblocks.quickblocktype",
+        "fields": {
+            "modified_by": 1,
+            "name": "store",
+            "is_active": true,
+            "created_by": 1,
+            "created_on": "2012-07-09T14:44:57.407",
+            "modified_on": "2012-07-09T14:44:57.407",
+            "slug": "store",
+            "description": "Few major element representing a store."
+        }
+    },
+    {
+        "pk": 2,
+        "model": "django_quickblocks.quickblocktype",
+        "fields": {
+            "modified_by": 1,
+            "name": "quote",
+            "is_active": true,
+            "created_by": 1,
+            "created_on": "2012-07-09T14:45:35.567",
+            "modified_on": "2012-07-09T14:57:46.430",
+            "slug": "quote",
+            "description": "Inspirational words in relation with motome from friends"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "django_quickblocks.quickblock",
+        "fields": {
+            "content": "gourmet burrito bar.",
+            "modified_by": 1,
+            "title": "Meze Fresh",
+            "image": "quickblocks/Screen_Shot_2012-07-08_at_7.48.10_PM.png",
+            "tags": " fast food, mexican food, burrito ",
+            "is_active": true,
+            "created_by": 1,
+            "quickblock_type": 1,
+            "created_on": "2012-07-09T14:54:51.699",
+            "link": "",
+            "modified_on": "2012-07-09T14:54:51.699",
+            "priority": 0
+        }
+    },
+    {
+        "pk": 2,
+        "model": "django_quickblocks.quickblock",
+        "fields": {
+            "content": "Motome let you place order and deliver to you wherever you are in Kigali city.",
+            "modified_by": 1,
+            "title": "Motome team",
+            "image": "",
+            "tags": "",
+            "is_active": true,
+            "created_by": 1,
+            "quickblock_type": 2,
+            "created_on": "2012-07-09T14:59:33.644",
+            "link": "",
+            "modified_on": "2012-07-09T14:59:33.644",
+            "priority": 0
+        }
+    }
+]

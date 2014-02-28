@@ -1,0 +1,21 @@
+[
+    {
+        "pk": 1,
+        "model": "stores.store",
+        "fields": {
+            "modified_by": 1,
+            "name": "Meze Fresh",
+            "country": 1,
+            "is_active": true,
+            "created_by": 1,
+            "lat": "-1.95363",
+            "created_on": "2012-07-06T10:52:10.076",
+            "splash": "splashs/Screen_Shot_2012-07-08_at_7.48.10_PM.png",
+            "managers": [],
+            "modified_on": "2012-07-12T09:51:33.839",
+            "logo": "",
+            "lng": "30.09525",
+            "description": "Gourmet burrito bar."
+        }
+    }
+]
